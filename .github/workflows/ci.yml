@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test-portable:
+    name: go test (process / portable)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+      - name: Unit and portable process tests
+        env:
+          CGO_ENABLED: "0"
+        run: go test ./...
+      - name: Build CLI
+        env:
+          CGO_ENABLED: "0"
+        run: go build -o asl ./cmd/asl
+      - name: Smoke process backend only
+        run: ./asl -backends process -out out-ci -format both

@@ -1,0 +1,7 @@
+/asl
+/out/
+/out-ci/
+*.exe
+*.test
+*.out
+.DS_Store
